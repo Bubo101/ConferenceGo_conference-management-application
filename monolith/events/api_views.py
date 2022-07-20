@@ -1,3 +1,5 @@
+from pickle import GET
+from unicodedata import name
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 import json
@@ -11,7 +13,9 @@ class LocationListEncoder(ModelEncoder):
     model = Location
     properties = [
         "name",
-        "picture_url"
+        "picture_url",
+        "id"
+        #added picture_url so json will include it 
         ]
 
 
@@ -51,6 +55,27 @@ class ConferenceDetailEncoder(ModelEncoder):
     encoders = {
         "location": LocationListEncoder(),
     }
+
+@require_http_methods(["GET"])
+def api_list_states(request):
+    # Get the states from the database ordered by name
+    if request.method == "GET":
+        states = State.objects.all().order_by("name")
+    # Create an empty list named state_list
+        state_list = []
+    # For each state in the states from the database
+        # Create a dictionary that contains the name and
+        # abbreviation for each state
+        for state in states:
+            d = {
+                "name": state.name,
+                "abbreviation": state.abbreviation,
+            }
+            state_list.append(d)
+        # Append the dictionary to the list
+
+    return JsonResponse({"states": state_list})
+
 
 
 @require_http_methods(["GET", "POST"])
