@@ -13,6 +13,11 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import dj_database_url
 from pathlib import Path
 
+DJWTO_MODE = "TWO-COOKIES"
+DJWTO_ACCESS_TOKEN_LIFETIME = None
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
+CORS_ALLOW_CREDENTIALS = True
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -43,6 +48,7 @@ INSTALLED_APPS = [
     "events.apps.EventsConfig",
     "presentations.apps.PresentationsConfig",
     "corsheaders",
+    "djwto",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

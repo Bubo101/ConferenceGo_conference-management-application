@@ -1,7 +1,5 @@
-console.log("new-location.js loaded");
-
 window.addEventListener("DOMContentLoaded", async () => {
-  const url = "http://localhost:8000/api/states/";
+  const url = "http://localhost:8000/api/conferences/";
 
   try {
     const response = await fetch(url);
@@ -11,25 +9,28 @@ window.addEventListener("DOMContentLoaded", async () => {
     } else {
       const data = await response.json();
 
-      const selectTag = document.querySelector("#state");
+      const selectTag = document.querySelector("#conference");
 
-      for (let state of data.states) {
+      for (let conference of data.conferences) {
         const option = document.createElement("option");
-        option.value = state.abbreviation;
-        option.innerText = state.name;
+        option.value = conference.id;
+        option.innerText = conference.name;
         selectTag.appendChild(option);
       }
 
-      const formTag = document.getElementById("create-location-form");
+      const formTag = document.getElementById("create-presentation-form");
       formTag.addEventListener("submit", async (event) => {
         event.preventDefault();
         console.log("Form submitted");
 
         const formData = new FormData(formTag);
         const json = JSON.stringify(Object.fromEntries(formData));
+        const conferenceid = document.querySelector("#conference").value;
+        //have selected object
+
         console.log(json);
 
-        const locationUrl = "http://localhost:8000/api/locations/";
+        const presentationUrl = `http://localhost:8000/api/conferences/${conferenceid}/presentations/`;
         const fetchConfig = {
           method: "post",
           body: json,
@@ -37,11 +38,11 @@ window.addEventListener("DOMContentLoaded", async () => {
             "Content-Type": "application/json",
           },
         };
-        const response = await fetch(locationUrl, fetchConfig);
+        const response = await fetch(presentationUrl, fetchConfig);
         if (response.ok) {
           formTag.reset();
-          const newLocation = await response.json();
-          console.log(newLocation);
+          const newPresentation = await response.json();
+          console.log(newPresentation);
         }
       });
     }
