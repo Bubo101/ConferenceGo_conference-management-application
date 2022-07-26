@@ -4,6 +4,10 @@ import AttendeesList from "./AttendeesList";
 import LocationForm from "./LocationForm";
 import ConferenceForm from "./ConferenceForm";
 import AttendConference from "./AttendeeForm";
+import PresentationForm from "./PresentationForm";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import MainPage from "./MainPage";
 
 function App(props) {
   if (props.attendees === undefined) {
@@ -11,15 +15,31 @@ function App(props) {
   }
 
   return (
-    <React.Fragment>
+  <BrowserRouter>      
     <Nav />
     <div className="container">
-      {<AttendConference />}
-      {/* {<ConferenceForm />} */}
-      {/* <LocationForm /> */}
-    {/* <AttendeesList attendees={props.attendees} /> */}
+      <Routes>
+        <Route path="">
+          <Route index element={<MainPage />} />
+        </Route>
+        <Route path="presentations">
+          <Route path="new" element={<PresentationForm />} />
+        </Route>
+        <Route path="attendees">
+          <Route path="new" element={<AttendConference />} />
+        </Route> 
+        <Route path="conferences">
+          <Route path="new" element={<ConferenceForm />} />
+        </Route> 
+        <Route path="locations">
+          <Route path="new" element={<LocationForm />} />
+        </Route> 
+        <Route path="attendees">
+          <Route path="" element={<AttendeesList attendees={props.attendees} />} />
+        </Route>   
+      </Routes>
     </div>
-    </React.Fragment>
+  </BrowserRouter>
   );
 }
 
